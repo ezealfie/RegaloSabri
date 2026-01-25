@@ -1,0 +1,20 @@
+{
+    "sqltools.connections": [
+
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "db.thchwfvkxwvsrkadgewp.supabase.co",
+            "driver": "PostgreSQL",
+            "name": "Regalo",
+            "database": "postgres",
+            "username": "postgres",
+            "connectString": "postgresql://postgres:5SDGggPfovxRqJJO@db.thchwfvkxwvsrkadgewp.supabase.co:5432/postgres"
+        }
+    ]
+}
