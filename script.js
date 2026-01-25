@@ -7,7 +7,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // --- CONFIGURACIÓN DE TU WEB ---
 // Cuando subas a Vercel, copiá el link acá (sin la barra al final)
 // Ejemplo: "https://regalo-sabri.vercel.app"
-const DOMINIO_WEB = "https://tu-sitio.vercel.app"; 
+const DOMINIO_WEB = "https:/regalo-sabri.vercel.app"; 
 
 // Inicializamos Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
