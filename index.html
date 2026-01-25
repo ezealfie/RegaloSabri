@@ -3,78 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Sabri ❤️</title>
+    <title>Espacio de Sabri</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
     <div class="scene">
+        <div class="ambient-light"></div>
+
         <div class="room">
+            <div class="floor">
+                <div class="table-shadow-floor"></div>
+                <div class="plant-shadow-floor"></div>
+            </div>
+
             <div class="wall back">
-                <div class="clock-plate" onclick="mostrarDetalleReloj()">
+                <div class="skirting"></div>
+                <div class="clock-container" onclick="mostrarDetalleReloj()">
                     <div class="clock-screen">
                         <span id="time-display">000:00:00:00</span>
                     </div>
-                    <div class="clock-label">TIEMPO JUNTOS</div>
                 </div>
             </div>
             
             <div class="wall left">
-                <div class="window">
-                    <div class="reflection"></div>
-                </div>
+                <div class="skirting"></div>
             </div>
 
-            <div class="floor"></div>
-
-            <div class="center-stage">
-                <div class="table-structure">
-                    <div class="table-top-face"></div>
-                    <div class="table-front-face"></div>
+            <div class="furniture-group">
+                
+                <div class="desk">
+                    <div class="desk-top"></div>
+                    <div class="desk-side-front"></div>
+                    <div class="desk-side-left"></div>
                     <div class="leg leg-fl"></div>
                     <div class="leg leg-fr"></div>
+                    <div class="leg leg-bl"></div>
+                    <div class="leg leg-br"></div>
                 </div>
 
-                <div class="wallet-container" onclick="abrirCuponera()">
-                    <div class="wallet-shape">
-                        <div class="w-face w-front"></div>
-                        <div class="w-face w-back"></div>
-                        <div class="w-face w-top"></div>
-                        <div class="w-face w-bottom"></div>
-                        <div class="w-face w-left"></div>
-                        <div class="w-face w-right"></div>
-                        <div class="money-bill"><span>$1000</span></div>
+                <div class="desktop-items">
+                    <div class="wallet-obj" onclick="abrirCuponera()">
+                        <div class="wallet-top"></div>
+                        <div class="wallet-side"></div>
+                        <div class="wallet-seam"></div>
                     </div>
-                    <div class="label-float">ABRIR BILLETERA</div>
+                    
+                    <div class="lamp-obj">
+                        <div class="lamp-base"></div>
+                        <div class="lamp-pole"></div>
+                        <div class="lamp-head"></div>
+                        <div class="lamp-bulb"></div>
+                    </div>
                 </div>
+
+                <div class="plant-obj">
+                    <div class="pot-body"></div>
+                    <div class="pot-rim"></div>
+                    <div class="plant-stem"></div>
+                    <div class="leaf leaf-1"></div>
+                    <div class="leaf leaf-2"></div>
+                    <div class="leaf leaf-3"></div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <div id="modal-clock" class="modal-overlay hidden" onclick="cerrarModales(event)">
         <div class="modal-box clock-detail">
-            <h2>⏳ Tiempo Exacto</h2>
+            <h2>⏳ Tiempo Juntos</h2>
             <div id="full-time-counter">Calculando...</div>
         </div>
     </div>
 
     <div id="modal-cupones" class="modal-overlay hidden" onclick="cerrarModales(event)">
         <div class="modal-box">
-            <h2>💸 Billetera de Sabri 💸</h2>
-            <p id="loading-msg">Conectando con la base de datos...</p>
-            
+            <h2>🎟️ Billetera de Cupones</h2>
+            <p id="loading-msg">Abriendo...</p>
             <div class="cupon-list" id="lista-cupones-render"></div>
-
             <div id="qr-container" class="hidden">
-                <h3 style="color:#e65100;">✅ ¡Canjeado!</h3>
-                <p style="font-size:12px;">Escaneá para ver tu vale:</p>
+                <h3 style="color:#e65100;">✅ ¡Listo!</h3>
                 <div id="qrcode"></div>
-                <button class="btn-cerrar-qr" onclick="cerrarQR()">Cerrar QR</button>
+                <button class="btn-cerrar-qr" onclick="cerrarQR()">Cerrar</button>
             </div>
         </div>
     </div>
