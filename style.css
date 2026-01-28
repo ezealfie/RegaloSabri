@@ -2,6 +2,7 @@
     --wall-color: #f2e9e1;
     --floor-wood: #4b3621;
     --desk-wood: #3a2518;
+    --desk-edge: #22150e; /* Borde oscuro para el 3D */
     --led-red: #ff2a2a;
     --lamp-glow: rgba(255, 210, 150, 0.3);
 }
@@ -17,19 +18,31 @@ body {
     display: flex; justify-content: center; align-items: center;
 }
 
+/* LA CAJA DEL DIORAMA */
 .room-diorama {
     position: relative; width: 600px; height: 600px;
     transform-style: preserve-3d;
-    transform: rotateX(60deg) rotateZ(-45deg); /* Ángulo Isométrico Real */
+    transform: rotateX(60deg) rotateZ(-45deg); /* Ángulo Isométrico */
 }
 
-/* ESTRUCTURA BASE */
+/* --- ESTRUCTURA --- */
 .floor-wood {
     position: absolute; width: 500px; height: 500px;
     background: var(--floor-wood);
     background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 50px);
     box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
     border: 5px solid #2d1b15;
+    transform-style: preserve-3d;
+}
+
+/* SOMBRA DE LA MESA (IMPORTANTE) */
+.table-shadow {
+    position: absolute;
+    top: 100px; left: 100px; /* Misma pos que la mesa */
+    width: 250px; height: 120px;
+    background: rgba(0,0,0,0.6);
+    filter: blur(20px);
+    transform: translateZ(2px);
 }
 
 .wall-back, .wall-left {
@@ -53,7 +66,7 @@ body {
     background: #3a2518; border-top: 1px solid #4b3621;
 }
 
-/* RELOJ NEÓN */
+/* --- RELOJ --- */
 .neon-clock {
     padding: 15px 40px; background: #0a0a0a; border-radius: 5px;
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
@@ -64,26 +77,48 @@ body {
     font-size: 32px; text-shadow: 0 0 10px var(--led-red);
 }
 
-/* MESA */
+/* --- MESA --- */
 .desk-group {
     position: absolute; top: 100px; left: 100px; width: 250px; height: 120px;
     transform-style: preserve-3d; transform: translateZ(110px);
 }
+
 .desk-top {
     position: absolute; width: 100%; height: 100%;
-    background: var(--desk-wood); box-shadow: 5px 20px 40px rgba(0,0,0,0.4);
+    background: var(--desk-wood);
+    /* Sombra interna para textura */
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+    transform-style: preserve-3d;
 }
+
+/* GROSOR DE MESA (Efecto 3D) */
+.desk-thickness-front {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 12px;
+    background: var(--desk-edge);
+    transform-origin: bottom; transform: rotateX(-90deg);
+}
+.desk-thickness-side {
+    position: absolute; top: 0; right: 0; width: 12px; height: 100%;
+    background: var(--desk-edge);
+    transform-origin: right; transform: rotateY(-90deg);
+}
+
+/* PATAS SÓLIDAS */
 .desk-leg {
-    position: absolute; width: 12px; height: 12px; background: #2d1b15;
+    position: absolute; width: 15px; height: 15px; background: #2d1b15;
 }
+/* El cuerpo de la pata bajando al piso */
 .desk-leg::after {
     content: ''; position: absolute; width: 100%; height: 110px;
-    background: #251611; transform: rotateX(-90deg); transform-origin: top;
+    background: #251611;
+    transform-origin: top; transform: rotateX(-90deg);
 }
-.fl { top: 5px; left: 5px; } .fr { top: 5px; right: 5px; }
-.bl { bottom: 5px; left: 5px; } .br { bottom: 5px; right: 5px; }
+.fl { top: 5px; left: 5px; } 
+.fr { top: 5px; right: 5px; }
+.bl { bottom: 5px; left: 5px; } 
+.br { bottom: 5px; right: 5px; }
 
-/* BILLETERA */
+/* --- OBJETOS --- */
 .wallet-leather {
     position: absolute; top: 40px; left: 160px; width: 55px; height: 35px;
     background: #4b3621; border-radius: 3px; transform: rotateZ(15deg);
@@ -91,7 +126,6 @@ body {
     border: 1px solid #3a2518;
 }
 
-/* PLANTA */
 .terracotta-pot {
     position: absolute; bottom: 40px; right: 60px; width: 50px; height: 50px;
     background: #d84315; border-radius: 5px; transform: translateZ(25px);
@@ -103,7 +137,7 @@ body {
 .l1 { transform: rotateY(0deg) rotateX(-20deg); }
 .l2 { transform: rotateY(120deg) rotateX(-20deg); }
 
-/* MODALES */
+/* --- MODALES --- */
 .hidden { display: none !important; }
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -120,3 +154,8 @@ body {
     border-radius: 8px; cursor: pointer; text-align: left; font-weight: 600;
 }
 .cupon.usado { background: #eee; color: #aaa; text-decoration: line-through; }
+.btn-cerrar {
+    background: #ff2a2a; color: white; border: none; padding: 10px 20px; 
+    border-radius: 5px; margin-top: 15px; cursor: pointer;
+}
+#qrcode { display: flex; justify-content: center; }
