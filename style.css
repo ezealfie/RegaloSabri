@@ -1,237 +1,122 @@
 :root {
-    --bg-color: #1a1a1a;
-    --wall-paint: #fdf5e6; /* Blanco Hueso / Crema */
-    --floor-wood: #5d4037;
-    --table-wood: #3e2723;
-    --led-red: #ff3333;
-    --lamp-glow: rgba(255, 200, 100, 0.5);
+    --wall-color: #f2e9e1;
+    --floor-wood: #4b3621;
+    --desk-wood: #3a2518;
+    --led-red: #ff2a2a;
+    --lamp-glow: rgba(255, 210, 150, 0.3);
 }
 
 body {
-    background-color: var(--bg-color);
-    margin: 0; height: 100vh;
+    background-color: #121212; margin: 0; height: 100vh;
     display: flex; justify-content: center; align-items: center;
     font-family: 'Poppins', sans-serif; overflow: hidden;
 }
 
-/* ESCENA ISOMÉTRICA */
 .scene {
-    width: 100%; height: 100%;
-    perspective: 2000px; /* Perspectiva lejana para efecto ortogonal limpio */
+    width: 100vw; height: 100vh; perspective: 1800px;
     display: flex; justify-content: center; align-items: center;
-    background: radial-gradient(circle at center, #2c2c2c 0%, #111 100%);
 }
 
-.room {
-    position: relative; width: 500px; height: 500px;
+.room-diorama {
+    position: relative; width: 600px; height: 600px;
     transform-style: preserve-3d;
-    /* ÁNGULO DE CÁMARA TIPO JUEGO ISOMÉTRICO - NO TOCAR */
-    transform: rotateX(60deg) rotateZ(-45deg);
+    transform: rotateX(60deg) rotateZ(-45deg); /* Ángulo Isométrico Real */
 }
 
-/* LUZ AMBIENTAL */
-.ambient-light {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 220, 180, 0.2), transparent 60%);
-    pointer-events: none; z-index: 10;
-}
-
-/* --- ESTRUCTURA --- */
-.floor {
+/* ESTRUCTURA BASE */
+.floor-wood {
     position: absolute; width: 500px; height: 500px;
     background: var(--floor-wood);
-    /* Tablas de madera */
-    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 50px);
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 50px);
     box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+    border: 5px solid #2d1b15;
 }
 
-.wall {
-    position: absolute; background: var(--wall-paint);
-    /* Textura sutil */
-    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+.wall-back, .wall-left {
+    position: absolute; background: var(--wall-color);
     box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
 }
 
-.back {
-    width: 500px; height: 300px;
-    transform-origin: top left;
-    transform: rotateX(-90deg) translateZ(-300px); /* Levanta la pared */
-    top: 0; left: 0;
-    display: flex; justify-content: center; align-items: flex-start;
+.wall-back {
+    width: 500px; height: 350px;
+    transform: rotateX(-90deg) translateZ(-175px) translateY(-175px);
+    display: flex; justify-content: center; align-items: center;
 }
 
-.left {
-    width: 300px; height: 500px;
-    transform-origin: top left;
-    transform: rotateY(90deg) translateZ(-300px); /* Levanta pared izq */
-    top: 0; left: 0;
+.wall-left {
+    width: 350px; height: 500px;
+    transform: rotateY(90deg) translateZ(-175px) translateX(-175px);
 }
 
-/* Zócalos */
-.skirting {
-    position: absolute; bottom: 0; width: 100%; height: 15px;
-    background: #3e2723; border-top: 2px solid #5d4037;
+.skirting-board {
+    position: absolute; bottom: 0; width: 100%; height: 12px;
+    background: #3a2518; border-top: 1px solid #4b3621;
 }
 
-/* --- RELOJ (En pared trasera) --- */
-.clock-container {
-    margin-top: 80px; /* Altura en la pared */
-    padding: 15px 30px;
-    background: #111; border: 4px solid #222; border-radius: 5px;
-    box-shadow: 0 0 20px rgba(255, 50, 50, 0.3);
-    cursor: pointer; transition: transform 0.2s;
-    transform: translateZ(10px); /* Sobresale un poco */
+/* RELOJ NEÓN */
+.neon-clock {
+    padding: 15px 40px; background: #0a0a0a; border-radius: 5px;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+    transform: translateZ(10px); cursor: pointer;
 }
-.clock-container:hover { transform: translateZ(15px); }
-
-.clock-screen {
+#time-display {
     font-family: 'Orbitron', monospace; color: var(--led-red);
-    font-size: 28px; letter-spacing: 3px;
-    text-shadow: 0 0 10px var(--led-red);
+    font-size: 32px; text-shadow: 0 0 10px var(--led-red);
 }
 
-/* --- MESA (Alineada al piso) --- */
-.furniture-group {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; transform-style: preserve-3d;
+/* MESA */
+.desk-group {
+    position: absolute; top: 100px; left: 100px; width: 250px; height: 120px;
+    transform-style: preserve-3d; transform: translateZ(110px);
 }
-
-.desk {
-    position: absolute; top: 100px; left: 100px;
-    width: 250px; height: 120px;
-    transform-style: preserve-3d;
-    transform: translateZ(120px); /* ALTURA DE LA MESA */
-    pointer-events: auto;
-}
-
 .desk-top {
     position: absolute; width: 100%; height: 100%;
-    background: var(--table-wood);
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    background: var(--desk-wood); box-shadow: 5px 20px 40px rgba(0,0,0,0.4);
 }
-.desk-side-front {
-    position: absolute; width: 100%; height: 10px;
-    background: #2d1b15; bottom: 0;
-    transform-origin: bottom; transform: rotateX(-90deg);
+.desk-leg {
+    position: absolute; width: 12px; height: 12px; background: #2d1b15;
 }
-.desk-side-left {
-    position: absolute; width: 10px; height: 100%;
-    background: #3e2723; right: 0;
-    transform-origin: right; transform: rotateY(-90deg);
+.desk-leg::after {
+    content: ''; position: absolute; width: 100%; height: 110px;
+    background: #251611; transform: rotateX(-90deg); transform-origin: top;
+}
+.fl { top: 5px; left: 5px; } .fr { top: 5px; right: 5px; }
+.bl { bottom: 5px; left: 5px; } .br { bottom: 5px; right: 5px; }
+
+/* BILLETERA */
+.wallet-leather {
+    position: absolute; top: 40px; left: 160px; width: 55px; height: 35px;
+    background: #4b3621; border-radius: 3px; transform: rotateZ(15deg);
+    cursor: pointer; box-shadow: 2px 3px 6px rgba(0,0,0,0.5);
+    border: 1px solid #3a2518;
 }
 
-/* Patas (Van hacia abajo Z negativo) */
-.leg {
-    position: absolute; width: 15px; height: 15px; background: #2d1b15;
-}
-.leg::after { /* El largo de la pata hacia el piso */
-    content: ''; position: absolute; top:0; left:0; width:100%; height:120px;
-    background: #2d1b15; transform-origin: top; transform: translateZ(-1px) rotateX(-90deg);
-}
-.leg-fl { top: 10px; left: 10px; }
-.leg-fr { top: 10px; right: 10px; }
-.leg-bl { bottom: 10px; left: 10px; }
-.leg-br { bottom: 10px; right: 10px; }
-
-/* SOMBRA REALISTA EN EL PISO */
-.table-shadow-floor {
-    position: absolute; top: 110px; left: 110px;
-    width: 250px; height: 120px;
-    background: rgba(0,0,0,0.6); filter: blur(15px);
-}
-
-/* --- OBJETOS SOBRE LA MESA --- */
-.desktop-items {
-    position: absolute; top: 100px; left: 100px; /* Misma pos que la mesa */
-    width: 250px; height: 120px;
-    transform: translateZ(121px); /* 1px arriba de la mesa */
-    transform-style: preserve-3d; pointer-events: auto;
-}
-
-/* BILLETERA (Tipo Cuero) */
-.wallet-obj {
-    position: absolute; top: 30px; left: 150px;
-    width: 60px; height: 40px;
-    background: #4e342e; border-radius: 2px;
-    transform: rotateZ(15deg); cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-    transition: transform 0.2s;
-}
-.wallet-obj:hover { transform: rotateZ(15deg) scale(1.05); }
-.wallet-top {
-    position: absolute; top:0; left:0; width:100%; height:100%;
-    background: #5d4037; /* Tapa */
-}
-.wallet-seam {
-    position: absolute; bottom: 5px; left:0; width:100%; height:1px;
-    border-bottom: 1px dashed #8d6e63;
-}
-
-/* LÁMPARA */
-.lamp-obj {
-    position: absolute; top: 20px; left: 20px;
-    transform-style: preserve-3d;
-}
-.lamp-base { width: 30px; height: 30px; background: #222; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
-.lamp-pole { 
-    position: absolute; top: 15px; left: 15px;
-    width: 4px; height: 60px; background: #333;
-    transform-origin: bottom; transform: rotateX(-90deg);
-}
-.lamp-head {
-    position: absolute; top: 15px; left: 15px;
-    width: 30px; height: 25px; background: #ffcc80;
-    transform: translateZ(60px) rotateY(45deg) rotateX(20deg); /* Arriba del palo */
-    border-radius: 10px 10px 0 0;
-    box-shadow: 0 0 20px #ffcc80; /* Brillo */
-}
-
-/* --- PLANTA EN EL PISO --- */
-.plant-obj {
-    position: absolute; top: 350px; left: 50px;
-    width: 40px; height: 40px;
-    transform-style: preserve-3d; pointer-events: auto;
-}
-.pot-body {
-    width: 100%; height: 100%; background: #d84315; border-radius: 50%;
-    transform: translateZ(15px); /* Altura maceta */
-}
-.pot-body::before { /* Cuerpo hacia abajo */
-    content:''; position: absolute; width:100%; height:30px; background:#bf360c;
-    transform: rotateX(-90deg) translateZ(20px); border-radius: 5px;
-}
-.plant-shadow-floor {
-    position: absolute; top: 350px; left: 50px; width: 50px; height: 50px;
-    background: rgba(0,0,0,0.5); filter: blur(8px);
-}
-.plant-stem {
-    position: absolute; width: 4px; height: 50px; background: #2e7d32;
-    left: 18px; top: 18px; transform: rotateX(-90deg) translateZ(15px);
+/* PLANTA */
+.terracotta-pot {
+    position: absolute; bottom: 40px; right: 60px; width: 50px; height: 50px;
+    background: #d84315; border-radius: 5px; transform: translateZ(25px);
 }
 .leaf {
-    position: absolute; width: 25px; height: 40px; background: #4caf50;
-    border-radius: 0 20px 0 20px;
-    transform-origin: bottom center;
+    position: absolute; background: #2e7d32; width: 25px; height: 45px;
+    border-radius: 0 25px 0 25px; bottom: 40px; transform-origin: bottom;
 }
-.leaf-1 { transform: translateZ(50px) rotateX(-90deg) rotateY(0deg); left: 10px; }
-.leaf-2 { transform: translateZ(50px) rotateX(-90deg) rotateY(120deg); left: 10px; }
-.leaf-3 { transform: translateZ(50px) rotateX(-90deg) rotateY(240deg); left: 10px; }
+.l1 { transform: rotateY(0deg) rotateX(-20deg); }
+.l2 { transform: rotateY(120deg) rotateX(-20deg); }
 
 /* MODALES */
 .hidden { display: none !important; }
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 9999;
+    background: rgba(0,0,0,0.8); z-index: 999;
     display: flex; justify-content: center; align-items: center;
     backdrop-filter: blur(5px);
 }
 .modal-box {
-    background: #fff; padding: 30px; border-radius: 15px;
-    text-align: center; width: 320px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    background: #fff; padding: 30px; border-radius: 15px; width: 320px; text-align: center;
 }
-.clock-detail { background: #111; color: var(--led-red); border: 2px solid #333; }
-.cupon { background: #fff3e0; border: 1px solid #ffcc80; padding: 12px; margin: 10px 0; border-radius: 8px; cursor: pointer; text-align: left; font-weight: 600; }
-.cupon:hover { background: #ffe0b2; }
-.cupon.usado { background: #eee; border-color: #ccc; color: #999; text-decoration: line-through; }
-#qrcode { display: flex; justify-content: center; margin: 15px 0; }
-.btn-cerrar-qr { background: #e65100; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+.dark-mode { background: #000; color: var(--led-red); border: 2px solid #222; }
+.cupon {
+    background: #fff8e1; border: 1px solid #ffcc80; padding: 15px; margin: 10px 0;
+    border-radius: 8px; cursor: pointer; text-align: left; font-weight: 600;
+}
+.cupon.usado { background: #eee; color: #aaa; text-decoration: line-through; }
