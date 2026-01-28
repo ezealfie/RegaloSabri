@@ -1,159 +1,224 @@
 :root {
-    --bg-void: #111;
-    --wall-warm: #f4ebd9; /* Crema suave */
-    --floor-wood: #4a3328; /* Madera oscura */
-    --desk-wood: #38261d;
-    --desk-edge: #261812; /* Borde oscuro para efecto 3D */
-    --led-red: #ff2a2a;
-    --lamp-light: rgba(255, 210, 160, 0.4);
+    --bg-color: #050505;
+    --wall-warm: #f2eadd; /* Pared crema */
+    --floor-wood: #4a3b2a; /* Piso madera */
+    --desk-wood: #2e1c14;
+    --desk-edge: #1a0f0a;
+    --silver-laptop: #c0c0c0;
+    --led-red: #ff3333;
+    --lamp-warm: rgba(255, 200, 100, 0.4);
 }
 
 body {
-    background-color: var(--bg-void); margin: 0; height: 100vh;
+    margin: 0; height: 100vh; background: var(--bg-color);
     display: flex; justify-content: center; align-items: center;
     font-family: 'Poppins', sans-serif; overflow: hidden;
 }
 
 .scene {
-    width: 100vw; height: 100vh; perspective: 2000px;
+    width: 100vw; height: 100vh;
+    /* Perspectiva más baja para realismo 3D */
+    perspective: 1200px;
     display: flex; justify-content: center; align-items: center;
-    background: radial-gradient(circle at center, #222, #000);
+    background: radial-gradient(circle at center, #222 0%, #000 90%);
 }
 
-/* --- EL DIORAMA (La Caja Mágica) --- */
-.room-diorama {
-    position: relative; width: 500px; height: 500px;
-    transform-style: preserve-3d;
-    /* Ángulo Isométrico Perfecto - NO TOCAR */
-    transform: rotateX(60deg) rotateZ(-45deg);
-}
-
-/* --- ESTRUCTURA --- */
-.floor-wood {
-    position: absolute; width: 500px; height: 500px;
+/* --- LA BASE DEL CUARTO (PISO) --- */
+.room-base {
+    position: relative; width: 600px; height: 600px;
     background: var(--floor-wood);
-    /* Tablas de madera */
-    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 50px);
-    box-shadow: inset 0 0 150px rgba(0,0,0,0.6);
+    /* Textura de piso */
+    background-image: 
+        linear-gradient(90deg, rgba(0,0,0,0.2) 2px, transparent 2px),
+        linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+    background-size: 60px 100%, 100% 60px;
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.8);
     transform-style: preserve-3d;
+    
+    /* CÁMARA: Ángulo más frontal para ver las paredes bien */
+    transform: rotateX(50deg) rotateZ(-45deg) translateY(50px);
+}
+
+/* --- PAREDES --- */
+.wall {
+    position: absolute; background: var(--wall-warm);
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.2);
+    /* Esto evita que parpadeen */
+    backface-visibility: hidden; 
 }
 
 .wall-back {
-    position: absolute; width: 500px; height: 350px;
-    background: var(--wall-warm);
-    transform-origin: top; transform: rotateX(-90deg) translateZ(-350px);
-    top: 0; display: flex; justify-content: center; align-items: center;
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
+    width: 600px; height: 600px; /* AUMENTADO para que no se corte */
+    transform-origin: top; 
+    transform: rotateX(-90deg);
+    top: 0; left: 0;
+    display: flex; justify-content: center; align-items: center;
 }
 
 .wall-left {
-    position: absolute; width: 350px; height: 500px;
-    background: var(--wall-warm);
-    transform-origin: left; transform: rotateY(90deg);
+    width: 600px; height: 600px; /* AUMENTADO */
+    transform-origin: left; 
+    transform: rotateY(90deg);
     top: 0; left: 0;
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
 }
 
 .skirting { /* Zócalo */
-    position: absolute; bottom: 0; width: 100%; height: 15px;
-    background: var(--desk-wood); border-top: 1px solid #261812;
+    position: absolute; bottom: 0; width: 100%; height: 18px;
+    background: #2a1d15; border-top: 2px solid #3e2b20;
 }
 
-.warm-light-reflection {
-    position: absolute; top: 50px; right: 0; width: 200px; height: 300px;
-    background: radial-gradient(ellipse at right, var(--lamp-light), transparent 70%);
+/* Reflejo de luz en pared */
+.light-reflection {
+    position: absolute; top: 100px; right: 0; width: 300px; height: 400px;
+    background: radial-gradient(ellipse at center, var(--lamp-warm), transparent 70%);
+    filter: blur(20px); opacity: 0.6;
 }
 
-/* --- RELOJ --- */
-.clock-box {
-    padding: 15px 35px; background: #0a0a0a; border-radius: 4px;
-    box-shadow: 0 0 35px rgba(255, 42, 42, 0.5);
-    transform: translateZ(15px); cursor: pointer; border: 2px solid #1a1a1a;
+/* --- RELOJ CORREGIDO --- */
+.clock {
+    padding: 15px 40px; background: #080808; border-radius: 6px;
+    box-shadow: 0 0 40px rgba(255, 50, 50, 0.4);
+    
+    /* Rotación simple para que mire al frente */
+    transform: translateZ(20px) rotateX(180deg);
+    cursor: pointer; border: 3px solid #222;
 }
+
 #time-display {
     font-family: 'Orbitron', monospace; color: var(--led-red);
-    font-size: 28px; text-shadow: 0 0 15px var(--led-red);
+    font-size: 32px; text-shadow: 0 0 15px var(--led-red);
+    display: block;
+    /* Sacamos el scaleY(-1) que lo daba vuelta */
+    transform: scaleX(-1); /* Espejar horizontalmente si se ve al revés, o quitar si se ve bien */
 }
 
-/* --- MESA 3D SÓLIDA --- */
-.desk-container {
-    position: absolute; top: 100px; left: 100px; width: 250px; height: 120px;
+/* --- MESA 3D --- */
+.desk-group {
+    position: absolute; top: 150px; left: 150px; width: 280px; height: 140px;
     transform-style: preserve-3d;
-    transform: translateZ(100px); /* Altura de la mesa desde el piso */
+    transform: translateZ(110px); /* Altura */
 }
 
 .desk-top {
     position: absolute; width: 100%; height: 100%;
     background: var(--desk-wood);
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
     transform-style: preserve-3d;
 }
 
-/* Bordes 3D para que no parezca papel */
+/* Bordes (Grosor) */
 .desk-edge-front {
-    position: absolute; bottom: 0; width: 100%; height: 12px;
+    position: absolute; bottom: 0; width: 100%; height: 15px;
     background: var(--desk-edge); transform-origin: bottom; transform: rotateX(-90deg);
 }
 .desk-edge-side {
-    position: absolute; right: 0; width: 12px; height: 100%;
+    position: absolute; right: 0; width: 15px; height: 100%;
     background: var(--desk-edge); transform-origin: right; transform: rotateY(-90deg);
+}
+
+/* Sombra en el piso */
+.desk-shadow-floor {
+    position: absolute; top: 160px; left: 160px; width: 280px; height: 140px;
+    background: rgba(0,0,0,0.6); filter: blur(25px); transform: translateZ(1px);
 }
 
 /* Patas */
 .leg {
-    position: absolute; width: 14px; height: 14px; background: var(--desk-edge);
+    position: absolute; width: 18px; height: 18px; background: var(--desk-edge);
 }
-.leg::after { /* El cuerpo de la pata bajando al piso */
-    content: ''; position: absolute; width: 100%; height: 100px;
-    background: var(--desk-edge); transform-origin: top; transform: rotateX(-90deg);
+.leg::after {
+    content: ''; position: absolute; width: 100%; height: 110px;
+    background: #150a05; transform-origin: top; transform: rotateX(-90deg);
 }
 .fl { top: 5px; left: 5px; } .fr { top: 5px; right: 5px; }
 .bl { bottom: 5px; left: 5px; } .br { bottom: 5px; right: 5px; }
 
-/* Sombra en el piso (Ancla la mesa) */
-.table-shadow-floor {
-    position: absolute; top: 110px; left: 110px; width: 250px; height: 120px;
-    background: rgba(0,0,0,0.5); filter: blur(20px); transform: translateZ(1px);
+/* --- LAPTOP --- */
+.laptop {
+    position: absolute; top: 30px; left: 70px; width: 100px; height: 65px;
+    transform-style: preserve-3d; cursor: pointer;
+    transform: rotateZ(8deg);
+}
+.laptop-base {
+    position: absolute; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
+    border-radius: 4px;
+    box-shadow: 1px 1px 0 #666, 2px 2px 0 #666, 3px 3px 5px rgba(0,0,0,0.5);
+}
+.laptop-screen {
+    position: absolute; top: 0; width: 100%; height: 100%;
+    background: #111; border: 3px solid #c0c0c0; border-radius: 4px;
+    transform-origin: top; transform: rotateX(-105deg);
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+.screen-glare {
+    position: absolute; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
 }
 
-/* --- OBJETOS --- */
-.wallet-item {
-    position: absolute; top: 40px; left: 150px; width: 55px; height: 35px;
-    background: #4b3621; border-radius: 3px; transform: rotateZ(10deg);
-    cursor: pointer; box-shadow: 2px 3px 5px rgba(0,0,0,0.5); border: 1px solid #38261d;
+/* --- LÁMPARA Y TAZA --- */
+.lamp { position: absolute; top: 10px; left: 15px; transform-style: preserve-3d; }
+.lamp-base { width: 35px; height: 35px; background: #222; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+.lamp-arm {
+    position: absolute; bottom: 15px; left: 15px; width: 5px; height: 70px;
+    background: #333; transform-origin: bottom; transform: rotateX(-15deg);
+}
+.lamp-head {
+    position: absolute; top: -60px; left: -10px; width: 45px; height: 45px;
+    background: #eee; border-radius: 50% 50% 0 0;
+    transform: translateZ(70px) rotateX(-90deg);
+    box-shadow: 0 0 30px var(--lamp-warm);
 }
 
-.pot-clay {
-    position: absolute; bottom: 50px; right: 60px; width: 50px; height: 50px;
-    background: #d84315; border-radius: 5px; transform: translateZ(25px);
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+.mug {
+    position: absolute; bottom: 25px; right: 35px; width: 22px; height: 22px;
+    background: #fff; border-radius: 50%;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
+.mug::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+    background: #3e2723; border-radius: 50%;
+}
+
+/* --- PLANTA --- */
+.plant-container {
+    position: absolute; bottom: 80px; right: 80px;
+    transform-style: preserve-3d;
+}
+.pot {
+    width: 50px; height: 50px; background: #d35400;
+    border-radius: 4px; transform: translateZ(25px);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+}
+.pot::before { content:''; position: absolute; top:2px; left:2px; width:46px; height:46px; background: #3e2723; }
+
 .leaf {
-    position: absolute; background: #2e7d32; width: 25px; height: 45px;
-    border-radius: 0 25px 0 25px; bottom: 45px; transform-origin: bottom;
+    position: absolute; width: 25px; height: 50px; background: #2e7d32;
+    border-radius: 0 30px 0 30px; bottom: 45px; left: 12px;
+    transform-origin: bottom center;
 }
-.l1 { transform: rotateY(0deg) rotateX(-20deg); }
-.l2 { transform: rotateY(120deg) rotateX(-20deg); }
+.l1 { transform: rotateX(-15deg) rotateY(0deg); }
+.l2 { transform: rotateX(-15deg) rotateY(120deg); }
+.l3 { transform: rotateX(-15deg) rotateY(240deg); }
 
 /* --- MODALES --- */
 .hidden { display: none !important; }
 .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 999;
-    display: flex; justify-content: center; align-items: center;
-    backdrop-filter: blur(5px);
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999;
+    display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px);
 }
 .modal-box {
-    background: #fff; padding: 30px; border-radius: 15px; width: 320px; text-align: center;
+    background: #fff; padding: 30px; border-radius: 15px; width: 340px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-.dark-theme { background: #0a0a0a; color: var(--led-red); border: 2px solid #222; }
+.dark-mode { background: #0a0a0a; color: var(--led-red); border: 1px solid #333; }
 .cupon {
     background: #fff8e1; border: 1px solid #ffcc80; padding: 15px; margin: 10px 0;
     border-radius: 8px; cursor: pointer; text-align: left; font-weight: 600;
 }
-.cupon.usado { background: #eee; color: #aaa; text-decoration: line-through; }
+.cupon.usado { background: #f0f0f0; color: #aaa; text-decoration: line-through; }
 .btn-cerrar {
-    background: #ff2a2a; color: white; border: none; padding: 10px 20px; 
-    border-radius: 5px; margin-top: 15px; cursor: pointer;
+    background: #ff3333; color: white; border: none; padding: 10px 25px;
+    border-radius: 6px; margin-top: 15px; cursor: pointer; font-weight: bold;
 }
-#qrcode { display: flex; justify-content: center; margin-top:15px; }
+#qrcode { display: flex; justify-content: center; margin-top: 20px; }

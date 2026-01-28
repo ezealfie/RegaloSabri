@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Espacio de Sabri</title>
+    <title>Espacio de Sabri</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -12,36 +12,39 @@
 <body>
 
     <div class="scene">
-        <div class="room-diorama">
+        <div class="room-base">
             
-            <div class="floor-wood">
-                <div class="table-shadow-floor"></div>
-            </div>
+            <div class="desk-shadow-floor"></div>
 
-            <div class="wall-back">
-                <div class="skirting"></div> <div class="clock-box" onclick="mostrarDetalleReloj()">
+            <div class="wall wall-back">
+                <div class="skirting"></div>
+                <div class="clock" onclick="mostrarDetalleReloj()">
                     <span id="time-display">00:00:00</span>
                 </div>
             </div>
             
-            <div class="wall-left">
+            <div class="wall wall-left">
                 <div class="skirting"></div>
-                <div class="warm-light-reflection"></div>
+                <div class="light-reflection"></div>
             </div>
 
-            <div class="desk-container">
+            <div class="desk-group">
                 <div class="desk-top">
                     <div class="desk-edge-front"></div>
                     <div class="desk-edge-side"></div>
-
-                    <div class="desk-lamp">
+                    
+                    <div class="laptop" onclick="abrirCuponera()">
+                        <div class="laptop-screen"><div class="screen-glare"></div></div>
+                        <div class="laptop-base"></div>
+                    </div>
+                    
+                    <div class="lamp">
+                        <div class="lamp-base"></div>
+                        <div class="lamp-arm"></div>
                         <div class="lamp-head"></div>
-                        <div class="lamp-glow"></div>
                     </div>
-                    <div class="wallet-item" onclick="abrirCuponera()">
-                        <div class="wallet-detail"></div>
-                    </div>
-                    <div class="mug-item"></div>
+                    
+                    <div class="mug"></div>
                 </div>
                 
                 <div class="leg fl"></div>
@@ -50,8 +53,8 @@
                 <div class="leg br"></div>
             </div>
 
-            <div class="plant-group">
-                <div class="pot-clay"></div>
+            <div class="plant-container">
+                <div class="pot"></div>
                 <div class="leaf l1"></div>
                 <div class="leaf l2"></div>
                 <div class="leaf l3"></div>
@@ -61,7 +64,7 @@
     </div>
 
     <div id="modal-clock" class="modal-overlay hidden" onclick="cerrarModales(event)">
-        <div class="modal-box dark-theme">
+        <div class="modal-box dark-mode">
             <h2>⏳ Tiempo Juntos</h2>
             <div id="full-time-counter">Calculando...</div>
         </div>
