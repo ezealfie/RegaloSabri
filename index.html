@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espacio de Sabri</title>
+    <title>El Espacio de Sabri</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -12,60 +12,57 @@
 <body>
 
     <div class="scene">
-        <div class="room">
-            <!-- PISO -->
-            <div class="floor"></div>
-            <div class="desk-shadow"></div>
+        <div class="room-diorama">
+            
+            <div class="floor-wood">
+                <div class="table-shadow-floor"></div>
+            </div>
 
-            <!-- PAREDES -->
-            <div class="wall wall-back">
-                <div class="skirting"></div>
-                <div class="clock" onclick="mostrarDetalleReloj()">
-                    <span id="time-display">000:00:00:00</span>
+            <div class="wall-back">
+                <div class="skirting"></div> <div class="clock-box" onclick="mostrarDetalleReloj()">
+                    <span id="time-display">00:00:00</span>
                 </div>
             </div>
-            <div class="wall wall-left">
+            
+            <div class="wall-left">
                 <div class="skirting"></div>
+                <div class="warm-light-reflection"></div>
             </div>
 
-            <!-- ESCRITORIO SOBRE EL PISO -->
-            <div class="desk">
-                <div class="desk-surface">
-                    <div class="desk-edge front"></div>
-                    <div class="desk-edge right"></div>
-                    <!-- Laptop plateada (abre cupones) -->
-                    <div class="laptop" onclick="abrirCuponera()">
-                        <div class="laptop-screen">
-                            <div class="laptop-bezel"></div>
-                        </div>
-                        <div class="laptop-base"></div>
-                        <div class="laptop-hinge"></div>
+            <div class="desk-container">
+                <div class="desk-top">
+                    <div class="desk-edge-front"></div>
+                    <div class="desk-edge-side"></div>
+
+                    <div class="desk-lamp">
+                        <div class="lamp-head"></div>
+                        <div class="lamp-glow"></div>
                     </div>
-                    <div class="lamp">
-                        <div class="lamp-arm"></div>
-                        <div class="lamp-shade"></div>
+                    <div class="wallet-item" onclick="abrirCuponera()">
+                        <div class="wallet-detail"></div>
                     </div>
-                    <div class="mug"></div>
+                    <div class="mug-item"></div>
                 </div>
-                <div class="desk-leg leg-fl"></div>
-                <div class="desk-leg leg-fr"></div>
-                <div class="desk-leg leg-bl"></div>
-                <div class="desk-leg leg-br"></div>
+                
+                <div class="leg fl"></div>
+                <div class="leg fr"></div>
+                <div class="leg bl"></div>
+                <div class="leg br"></div>
             </div>
 
-            <!-- PLANTA SOBRE EL PISO, AL LADO DEL ESCRITORIO -->
-            <div class="plant">
-                <div class="pot"></div>
-                <div class="plant-leaf l1"></div>
-                <div class="plant-leaf l2"></div>
-                <div class="plant-leaf l3"></div>
+            <div class="plant-group">
+                <div class="pot-clay"></div>
+                <div class="leaf l1"></div>
+                <div class="leaf l2"></div>
+                <div class="leaf l3"></div>
             </div>
+
         </div>
     </div>
 
     <div id="modal-clock" class="modal-overlay hidden" onclick="cerrarModales(event)">
-        <div class="modal-box dark-mode">
-            <h2>⏳ Tiempo Exacto</h2>
+        <div class="modal-box dark-theme">
+            <h2>⏳ Tiempo Juntos</h2>
             <div id="full-time-counter">Calculando...</div>
         </div>
     </div>

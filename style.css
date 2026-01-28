@@ -1,434 +1,159 @@
-/* ========== HABITACIÓN 3D — ARMADA DESDE CERO ========== */
-
 :root {
-    --wall: #ebe6e0;
-    --floor: #3d2817;
-    --floor-plank: rgba(0,0,0,0.12);
-    --desk: #2c1810;
-    --desk-edge: #1a0f0a;
-    --clock-red: #ff2a2a;
-    --lamp-glow: rgba(255,200,120,0.25);
+    --bg-void: #111;
+    --wall-warm: #f4ebd9; /* Crema suave */
+    --floor-wood: #4a3328; /* Madera oscura */
+    --desk-wood: #38261d;
+    --desk-edge: #261812; /* Borde oscuro para efecto 3D */
+    --led-red: #ff2a2a;
+    --lamp-light: rgba(255, 210, 160, 0.4);
 }
-
-* { box-sizing: border-box; }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: #0d0d0d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    background-color: var(--bg-void); margin: 0; height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    font-family: 'Poppins', sans-serif; overflow: hidden;
 }
 
-/* --- ESCENA Y CÁMARA --- */
 .scene {
-    width: 100vw;
-    height: 100vh;
-    perspective: 2200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100vw; height: 100vh; perspective: 2000px;
+    display: flex; justify-content: center; align-items: center;
+    background: radial-gradient(circle at center, #222, #000);
 }
 
-.room {
-    position: relative;
-    width: 500px;
-    height: 500px;
+/* --- EL DIORAMA (La Caja Mágica) --- */
+.room-diorama {
+    position: relative; width: 500px; height: 500px;
     transform-style: preserve-3d;
-    transform: rotateX(-20deg) rotateY(-28deg) scale(0.88);
+    /* Ángulo Isométrico Perfecto - NO TOCAR */
+    transform: rotateX(60deg) rotateZ(-45deg);
 }
 
-/* --- PISO (borde inferior = donde terminan las paredes) --- */
-.floor {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 480px;
-    height: 480px;
-    background: var(--floor);
-    background-image: repeating-linear-gradient(
-        90deg,
-        var(--floor-plank) 0,
-        var(--floor-plank) 1px,
-        transparent 1px,
-        transparent 48px
-    );
-    border: 4px solid #261510;
+/* --- ESTRUCTURA --- */
+.floor-wood {
+    position: absolute; width: 500px; height: 500px;
+    background: var(--floor-wood);
+    /* Tablas de madera */
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 50px);
+    box-shadow: inset 0 0 150px rgba(0,0,0,0.6);
     transform-style: preserve-3d;
-    /* Plano horizontal que hace borde con el zócalo: misma “altura” que la base de las paredes */
-    transform: rotateX(90deg) translateY(260px) translateZ(-250px);
-    transform-origin: center center;
-    box-shadow: inset 0 0 80px rgba(0,0,0,0.3);
 }
 
-.desk-shadow {
-    position: absolute;
-    bottom: 66px;
-    left: 118px;
-    width: 224px;
-    height: 102px;
-    background: rgba(0,0,0,0.35);
-    filter: blur(18px);
-    transform: rotateX(90deg) translateY(2px) translateZ(-248px);
-    border-radius: 4px;
-}
-
-/* --- PAREDES (base apoyada en el piso) --- */
-.wall {
-    position: absolute;
-    background: var(--wall);
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.06);
-}
-
-/* Pared trasera: apoyada en el piso (base en bottom del room) */
 .wall-back {
-    width: 480px;
-    height: 260px;
-    bottom: 0;
-    left: 0;
-    top: auto;
-    transform: translateZ(-250px);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 28px 24px;
+    position: absolute; width: 500px; height: 350px;
+    background: var(--wall-warm);
+    transform-origin: top; transform: rotateX(-90deg) translateZ(-350px);
+    top: 0; display: flex; justify-content: center; align-items: center;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
 }
 
-/* Pared izquierda: misma base, apoyada en el piso */
 .wall-left {
-    width: 260px;
-    height: 480px;
-    bottom: 0;
-    left: 0;
-    top: auto;
-    transform: rotateY(-90deg) translateX(-250px);
+    position: absolute; width: 350px; height: 500px;
+    background: var(--wall-warm);
+    transform-origin: left; transform: rotateY(90deg);
+    top: 0; left: 0;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.15);
 }
 
-.skirting {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 10px;
-    background: var(--desk-edge);
-    border-top: 1px solid #3d2817;
+.skirting { /* Zócalo */
+    position: absolute; bottom: 0; width: 100%; height: 15px;
+    background: var(--desk-wood); border-top: 1px solid #261812;
 }
 
-/* --- RELOJ EN PARED --- */
-.clock {
-    padding: 12px 32px;
-    background: #0a0a0a;
-    border-radius: 6px;
-    box-shadow: 0 0 24px rgba(255,0,0,0.35);
-    transform: translateZ(2px);
-    cursor: pointer;
+.warm-light-reflection {
+    position: absolute; top: 50px; right: 0; width: 200px; height: 300px;
+    background: radial-gradient(ellipse at right, var(--lamp-light), transparent 70%);
 }
 
+/* --- RELOJ --- */
+.clock-box {
+    padding: 15px 35px; background: #0a0a0a; border-radius: 4px;
+    box-shadow: 0 0 35px rgba(255, 42, 42, 0.5);
+    transform: translateZ(15px); cursor: pointer; border: 2px solid #1a1a1a;
+}
 #time-display {
-    font-family: 'Orbitron', monospace;
-    font-size: 28px;
-    color: var(--clock-red);
-    text-shadow: 0 0 8px var(--clock-red);
+    font-family: 'Orbitron', monospace; color: var(--led-red);
+    font-size: 28px; text-shadow: 0 0 15px var(--led-red);
 }
 
-/* --- ESCRITORIO SOBRE EL PISO (patas en el suelo) --- */
-.desk {
-    position: absolute;
-    bottom: 65px;
-    left: 120px;
-    width: 220px;
-    height: 100px;
+/* --- MESA 3D SÓLIDA --- */
+.desk-container {
+    position: absolute; top: 100px; left: 100px; width: 250px; height: 120px;
     transform-style: preserve-3d;
-    transform: translateZ(-250px);
+    transform: translateZ(100px); /* Altura de la mesa desde el piso */
 }
 
-.desk-surface {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, #3a2218 0%, var(--desk) 20%, #1f120c 100%);
-    border-radius: 2px;
-    box-shadow: inset 0 2px 8px rgba(255,255,255,0.04), inset 0 -2px 8px rgba(0,0,0,0.3);
+.desk-top {
+    position: absolute; width: 100%; height: 100%;
+    background: var(--desk-wood);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+    transform-style: preserve-3d;
 }
 
-.desk-edge {
-    position: absolute;
-    background: var(--desk-edge);
+/* Bordes 3D para que no parezca papel */
+.desk-edge-front {
+    position: absolute; bottom: 0; width: 100%; height: 12px;
+    background: var(--desk-edge); transform-origin: bottom; transform: rotateX(-90deg);
 }
-
-.desk-edge.front {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    transform-origin: bottom;
-    transform: rotateX(-90deg);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-}
-
-.desk-edge.right {
-    top: 0;
-    right: 0;
-    width: 8px;
-    bottom: 0;
-    transform-origin: right;
-    transform: rotateY(-90deg);
-    box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+.desk-edge-side {
+    position: absolute; right: 0; width: 12px; height: 100%;
+    background: var(--desk-edge); transform-origin: right; transform: rotateY(-90deg);
 }
 
 /* Patas */
-.desk-leg {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: linear-gradient(135deg, #120a06, #2d1b15);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+.leg {
+    position: absolute; width: 14px; height: 14px; background: var(--desk-edge);
+}
+.leg::after { /* El cuerpo de la pata bajando al piso */
+    content: ''; position: absolute; width: 100%; height: 100px;
+    background: var(--desk-edge); transform-origin: top; transform: rotateX(-90deg);
+}
+.fl { top: 5px; left: 5px; } .fr { top: 5px; right: 5px; }
+.bl { bottom: 5px; left: 5px; } .br { bottom: 5px; right: 5px; }
+
+/* Sombra en el piso (Ancla la mesa) */
+.table-shadow-floor {
+    position: absolute; top: 110px; left: 110px; width: 250px; height: 120px;
+    background: rgba(0,0,0,0.5); filter: blur(20px); transform: translateZ(1px);
 }
 
-.desk-leg::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 65px;
-    background: linear-gradient(90deg, #1a0f0a, #251611);
-    transform-origin: top;
-    transform: rotateX(-90deg);
+/* --- OBJETOS --- */
+.wallet-item {
+    position: absolute; top: 40px; left: 150px; width: 55px; height: 35px;
+    background: #4b3621; border-radius: 3px; transform: rotateZ(10deg);
+    cursor: pointer; box-shadow: 2px 3px 5px rgba(0,0,0,0.5); border: 1px solid #38261d;
 }
 
-.leg-fl { top: 4px; left: 6px; }
-.leg-fr { top: 4px; right: 6px; }
-.leg-bl { bottom: 4px; left: 6px; }
-.leg-br { bottom: 4px; right: 6px; }
-
-/* --- LAPTOP PLATEADA, PANTALLA NEGRA --- */
-.laptop {
-    position: absolute;
-    top: 38px;
-    left: 60px;
-    width: 95px;
-    height: 58px;
-    transform-style: preserve-3d;
-    transform: translateZ(6px);
-    cursor: pointer;
+.pot-clay {
+    position: absolute; bottom: 50px; right: 60px; width: 50px; height: 50px;
+    background: #d84315; border-radius: 5px; transform: translateZ(25px);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
-
-.laptop-screen {
-    position: absolute;
-    top: 0;
-    left: 4px;
-    width: 87px;
-    height: 52px;
-    background: #000;
-    border-radius: 2px 2px 0 0;
-    box-shadow: inset 0 0 0 2px #111, 0 2px 6px rgba(0,0,0,0.4);
+.leaf {
+    position: absolute; background: #2e7d32; width: 25px; height: 45px;
+    border-radius: 0 25px 0 25px; bottom: 45px; transform-origin: bottom;
 }
+.l1 { transform: rotateY(0deg) rotateX(-20deg); }
+.l2 { transform: rotateY(120deg) rotateX(-20deg); }
 
-.laptop-bezel {
-    position: absolute;
-    inset: 2px;
-    border: 2px solid #1a1a1a;
-    border-radius: 1px;
-    background: #000;
-}
-
-.laptop-base {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 95px;
-    height: 8px;
-    background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 30%, #a0a0a0 60%, #808080 100%);
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6);
-}
-
-.laptop-hinge {
-    position: absolute;
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(180deg, #909090, #606060);
-    border-radius: 2px;
-}
-
-/* --- LÁMPARA --- */
-.lamp {
-    position: absolute;
-    top: 12px;
-    left: 18px;
-    width: 8px;
-    height: 50px;
-    transform: translateZ(5px);
-}
-
-.lamp-arm {
-    position: absolute;
-    left: 2px;
-    top: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(90deg, #2a2a2a, #1a1a1a);
-    border-radius: 2px;
-}
-
-.lamp-shade {
-    position: absolute;
-    top: -10px;
-    left: -6px;
-    width: 20px;
-    height: 10px;
-    background: linear-gradient(180deg, #333, #111);
-    border-radius: 2px;
-    box-shadow: 0 0 16px var(--lamp-glow);
-}
-
-/* --- TAZA --- */
-.mug {
-    position: absolute;
-    top: 42px;
-    left: 165px;
-    width: 24px;
-    height: 28px;
-    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-    border: 2px solid #d0d0d0;
-    border-radius: 0 0 10px 10px;
-    transform: translateZ(5px);
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-}
-
-.mug::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    right: -3px;
-    width: 8px;
-    height: 5px;
-    background: linear-gradient(135deg, #f0f0f0, #ddd);
-    border: 2px solid #d0d0d0;
-    border-radius: 0 4px 4px 0;
-}
-
-.mug::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 2px;
-    width: 18px;
-    height: 14px;
-    background: linear-gradient(180deg, #4e342e, #3e2723);
-    border-radius: 0 0 6px 6px;
-}
-
-/* --- PLANTA SOBRE EL PISO --- */
-.plant {
-    position: absolute;
-    bottom: 2px;
-    left: 352px;
-    width: 50px;
-    height: 70px;
-    transform-style: preserve-3d;
-    transform: translateZ(-250px);
-}
-
-.plant::before {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 44px;
-    height: 10px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 50%;
-    filter: blur(5px);
-}
-
-.pot {
-    position: absolute;
-    bottom: 0;
-    left: 2px;
-    width: 40px;
-    height: 38px;
-    background: linear-gradient(145deg, #c0392b, #e74c3c 40%, #d35400);
-    border-radius: 3px 3px 6px 6px;
-    box-shadow: inset 1px 1px 4px rgba(255,255,255,0.2), 2px 4px 6px rgba(0,0,0,0.35);
-}
-
-.plant-leaf {
-    position: absolute;
-    width: 14px;
-    height: 42px;
-    bottom: 34px;
-    background: linear-gradient(90deg, #1b5e20, #2e7d32);
-    border-radius: 0 10px 0 10px;
-    transform-origin: bottom center;
-}
-
-.plant-leaf.l1 { left: 14px; transform: rotateZ(-6deg); }
-.plant-leaf.l2 { left: 18px; transform: rotateZ(4deg); }
-.plant-leaf.l3 { left: 22px; transform: rotateZ(-2deg); }
-
-/* ========== MODALES ========== */
+/* --- MODALES --- */
 .hidden { display: none !important; }
-
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.82);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(6px);
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 999;
+    display: flex; justify-content: center; align-items: center;
+    backdrop-filter: blur(5px);
 }
-
 .modal-box {
-    background: #fff;
-    padding: 28px;
-    border-radius: 14px;
-    width: 320px;
-    text-align: center;
+    background: #fff; padding: 30px; border-radius: 15px; width: 320px; text-align: center;
 }
-
-.modal-box.dark-mode {
-    background: #000;
-    color: var(--clock-red);
-    border: 2px solid #222;
-}
-
+.dark-theme { background: #0a0a0a; color: var(--led-red); border: 2px solid #222; }
 .cupon {
-    background: #fff8e1;
-    border: 1px solid #ffcc80;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
-    font-weight: 600;
+    background: #fff8e1; border: 1px solid #ffcc80; padding: 15px; margin: 10px 0;
+    border-radius: 8px; cursor: pointer; text-align: left; font-weight: 600;
 }
-
-.cupon.usado {
-    background: #eee;
-    color: #999;
-    text-decoration: line-through;
-}
-
+.cupon.usado { background: #eee; color: #aaa; text-decoration: line-through; }
 .btn-cerrar {
-    background: #ff2a2a;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    margin-top: 14px;
-    cursor: pointer;
+    background: #ff2a2a; color: white; border: none; padding: 10px 20px; 
+    border-radius: 5px; margin-top: 15px; cursor: pointer;
 }
-
-#qrcode {
-    display: flex;
-    justify-content: center;
-}
+#qrcode { display: flex; justify-content: center; margin-top:15px; }
